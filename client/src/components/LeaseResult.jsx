@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
+import LeaseDetailsTable from './LeaseDetailsTable';
+import LeasePaymentsTable from './LeasePaymentsTable';
 import ajax from '../lib/ajax.js';
 import utils from '../lib/utils.js';
+
+// Define the component title in one place
+const componentTitle = <h2>Lease Result Data</h2>;
 
 class LeaseResult extends Component {
 
@@ -9,7 +14,7 @@ class LeaseResult extends Component {
   componentDidMount(){
     // console.log(this.props.location.search);
     const leaseId = utils.parseOutLeaseId(this.props.location.search);
-    console.log("leaseId:", leaseId);
+    // console.log("leaseId:", leaseId);
     // do AJAX request here and update state with results
     this.updateResults(leaseId);
   }
@@ -18,7 +23,12 @@ class LeaseResult extends Component {
     super();
 
     this.state = {
-      photos: []
+      loading: false,
+      startDate: '',
+      endDate: '',
+      frequency: '',
+      paymentDay: '',
+      rent: 0,
     };
 
     this.updateResults = this.updateResults.bind(this);
@@ -27,18 +37,23 @@ class LeaseResult extends Component {
   updateResults(leaseId){
 
     // Set state here to show to the user the app is loading again
-    // this.setState({
-    //
-    // });
+    this.setState({
+      loading: true
+    });
 
     ajax.getRentalData(leaseId)
     .then( response => {
       // Run the callback function when the response is ready,
       // i.e. SUCCESS
       console.log('response:', response.data);
-      // this.setState({
-      //
-      // });
+      this.setState({
+        loading: false,
+        startDate: response.data.start_date,
+        endDate: response.data.end_date,
+        frequency: response.data.frequency,
+        paymentDay: response.data.payment_day,
+        rent: response.data.rent,
+      });
     })
     .catch( err => {
       // This callback is run if the request FAILS
@@ -50,10 +65,21 @@ class LeaseResult extends Component {
 
   render(){
 
+    //Return loading if the API data is still being fetched
+    if(this.state.loading) {
+      return(
+        <div>
+          {componentTitle}
+          <p>Loading...</p>
+        </div>
+      );
+    }
+
     return (
       <div>
-        <h3>Lease Result Data</h3>
-        <p>{this.props.match.params.leaseId}</p>
+        {componentTitle}
+        <LeaseDetailsTable leaseDetails={this.state} />
+        <LeasePaymentsTable />
       </div>
     );
   }
