@@ -10,13 +10,12 @@ app.use(cors());
 const BASE_URL = 'https://hiring-task-api.herokuapp.com/v1/leases';
 
 // Only route required pointing to API end point
-app.get('/leases', (req, res) => {
-  axios.get(`${BASE_URL}/${req.leaseId}`);
+app.get('/leases/:id', (req, res) => {
+  console.log("PARAMS:", req.params);
+  axios.get(`${BASE_URL}/${req.params.id}`)
   .then(response => {
-    res.setHeader('Content-Type', 'application/json');
     // Render the JSON
     res.json(response.data);
-    // res.json(JSON.parse(response.data));
   })
   .catch(error => {
     console.log(error);
