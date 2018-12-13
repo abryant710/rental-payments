@@ -14,8 +14,8 @@ const Title = <h1>Rental Payments App</h1>;
 const Routes = (
   <Router>
     <div>
-      <Route component={ NavBar } />
       {Title}
+      <Route component={ NavBar } />
       <Route exact path="/search" component={ SearchPage } />
       <Route exact path="/list" component={ ListPage } />
       <Route exact path="/leases.html" component={ LeaseResult } />
