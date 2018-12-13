@@ -4,7 +4,7 @@ import ajax from '../lib/ajax.js';
 import utils from '../lib/utils.js';
 
 // Define the component title in one place
-const ComponentTitle = <h3>List Of All Leases:</h3>;
+const ComponentTitle = <h3>List Of Leases By Tenant:</h3>;
 
 class ListPage extends Component {
 

@@ -9,7 +9,7 @@ class LeaseOwnershipTable extends Component {
       <table>
         <thead>
           <tr>
-            <th>Owner</th>
+            <th>Tenant</th>
             <th>Lease ID</th>
           </tr>
         </thead>

@@ -27,7 +27,7 @@ class HomePage extends Component {
 
     return (
       <div>
-        <h3>Find Lease Data by Lease ID:</h3>
+        <h3>Find Lease by Lease ID:</h3>
         <form onSubmit={ ev => this.handleSubmit(ev) }>
           <input type="text" onChange={ ev => this.handleInput(ev) } />
           <input type="submit" value="Find" />

@@ -16,6 +16,8 @@ code {
     monospace;
 }
 
+/* Custom styling */
+
 .leaseLink {
   text-decoration: underline;
   color: blue;
@@ -27,7 +29,8 @@ code {
 }
 
 .strongText {
-  color: darkgreen;
+  color: black;
+  text-decoration: underline;
 }
 
 input {

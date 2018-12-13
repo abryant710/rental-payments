@@ -10,6 +10,7 @@ import LeaseResult from './components/LeaseResult';
 // Define the App title
 const Title = <h1>Rental Payments App</h1>;
 
+// Define the React Routes
 const Routes = (
   <Router>
     <div>

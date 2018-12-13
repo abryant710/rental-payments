@@ -19,7 +19,7 @@ class NavBar extends Component {
           <input type="submit" value="Search By ID" />
         </form>
         <form className="navBar" onSubmit={ ev => this.pushToNavPage(ev, 'list') }>
-          <input type="submit" value="List All By ID" />
+          <input type="submit" value="List By Tenant" />
         </form>
       </div>
     );
