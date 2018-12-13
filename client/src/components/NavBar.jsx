@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 
 class NavBar extends Component {
 
-  // Handle submission of the form when a user wants to go to home page
-  pushToHomePage(event) {
+  // Handle submission of the form when a user wants to go to search page
+  pushToNavPage(event, page) {
     event.preventDefault(); // prevent form submit from causing reload of page
     // Don't push if already on this page
-    if(this.props.history.location.pathname !== "/") {
-      this.props.history.push(`/`);
+    if(this.props.history.location.pathname !== `/${page}`) {
+      this.props.history.push(`/${page}`);
     }
   }
 
@@ -15,11 +15,11 @@ class NavBar extends Component {
 
     return (
       <div className="navBar">
-        <form className="navBar" onSubmit={ ev => this.pushToHomePage(ev) }>
-          <input type="submit" value="List All By ID" />
-        </form>
-        <form className="navBar" onSubmit={ ev => this.pushToHomePage(ev) }>
+        <form className="navBar" onSubmit={ ev => this.pushToNavPage(ev, 'search') }>
           <input type="submit" value="Search By ID" />
+        </form>
+        <form className="navBar" onSubmit={ ev => this.pushToNavPage(ev, 'list') }>
+          <input type="submit" value="List All By ID" />
         </form>
       </div>
     );

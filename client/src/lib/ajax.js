@@ -13,7 +13,7 @@ export default {
   },
 
   // Return all results
-  getAllRentData() {
+  getAllRentLeases() {
     const url = `${LOCAL_NODE_BASE_URL}/leases`;
     // console.log("url: ", url);
     return axios.get(url);

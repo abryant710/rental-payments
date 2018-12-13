@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import utils from '../lib/utils.js';
 
 class HomePage extends Component {
 
@@ -19,18 +20,14 @@ class HomePage extends Component {
   // Handle submission of the form when a user wants query an ID
   handleSubmit(event){
     event.preventDefault(); // prevent form submit from causing reload of page
-    this.props.history.push({
-      pathname: '/leases.html',
-      search: "?" + new URLSearchParams({leaseId: this.state.leaseId})
-    })
+    utils.pushToLeasePage(this.props.history, this.state.leaseId);
   }
 
   render(){
 
     return (
       <div>
-        <h1>Rental Payments Home Page</h1>
-        <h3>Find Lease Data by Lease Id:</h3>
+        <h3>Find Lease Data by Lease ID:</h3>
         <form onSubmit={ ev => this.handleSubmit(ev) }>
           <input type="text" onChange={ ev => this.handleInput(ev) } />
           <input type="submit" value="Find" />

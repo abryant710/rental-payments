@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
-import LeaseDetailsTable from './LeaseDetailsTable';
-import LeasePaymentsTable from './LeasePaymentsTable';
+import LeaseOwnershipTable from './LeaseOwnershipTable';
 import ajax from '../lib/ajax.js';
 import utils from '../lib/utils.js';
 
-class LeaseResult extends Component {
+// Define the component title in one place
+const ComponentTitle = <h3>List Of All Leases:</h3>;
+
+class ListPage extends Component {
 
   // This is a built-in 'lifecycle method'. When defined it, it will
   // be run when this component is actually added to the DOM
   componentDidMount(){
-    const leaseId = utils.parseOutLeaseId(this.props.location.search);
     // do AJAX request here and update state with results
-    this.updateResults(leaseId);
+    this.updateList();
   }
 
   constructor(){
@@ -19,37 +20,29 @@ class LeaseResult extends Component {
 
     this.state = {
       loading: false,
-      startDate: '',
-      endDate: '',
-      frequency: '',
-      paymentDay: '',
-      rent: 0,
-      leaseId: ''
+      list: []
     };
 
-    this.updateResults = this.updateResults.bind(this);
+    this.pushToLeasePage = this.pushToLeasePage.bind(this);
+    this.updateList = this.updateList.bind(this);
   }
 
-  updateResults(leaseId){
+  // AJAX to get the list of tenants
+  updateList(){
 
     // Set state here to show to the user the app is loading again
     this.setState({
       loading: true
     });
 
-    ajax.getSingleRentData(leaseId)
+    ajax.getAllRentLeases()
     .then( response => {
       // Run the callback function when the response is ready,
       // i.e. SUCCESS
       console.log('response:', response.data);
       this.setState({
         loading: false,
-        startDate: response.data.start_date,
-        endDate: response.data.end_date,
-        frequency: response.data.frequency,
-        paymentDay: response.data.payment_day,
-        rent: response.data.rent,
-        leaseId: leaseId
+        list: response.data
       });
     })
     .catch( err => {
@@ -59,10 +52,11 @@ class LeaseResult extends Component {
 
   }
 
-  render(){
+  pushToLeasePage(leaseId) {
+    utils.pushToLeasePage(this.props.history, leaseId);
+  }
 
-    // Define the component title in one place
-    const ComponentTitle = <h3>Lease Data for id: <span className="strongText">{this.state.leaseId}</span></h3>;
+  render(){
 
     //Return loading if the API data is still being fetched
     if(this.state.loading) {
@@ -77,14 +71,11 @@ class LeaseResult extends Component {
     return (
       <div>
         {ComponentTitle}
-        <h4>Summary:</h4>
-        <LeaseDetailsTable leaseDetails={this.state} />
-        <h4>Payments Due:</h4>
-        <LeasePaymentsTable leaseDetails={this.state} />
+        <LeaseOwnershipTable leaseList={this.state.list} reRoute={this.pushToLeasePage} />
       </div>
     );
   }
 
 }
 
-export default LeaseResult;
+export default ListPage;

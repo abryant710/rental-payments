@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import utils from '../lib/utils.js';
+import dateFunctions from '../lib/dateFunctions.js';
 
 class LeasePaymentsTable extends Component {
 
@@ -31,7 +31,7 @@ class LeasePaymentsTable extends Component {
     const rent = this.props.leaseDetails.rent;
     const frequency = this.props.leaseDetails.frequency;
     // Add first Row
-    const firstRow = utils.getFirstWeek(startDate, paymentDay, frequency, rent);
+    const firstRow = dateFunctions.getFirstWeek(startDate, paymentDay, frequency, rent);
     rows.push(firstRow);
 
     // Then calculate all full frequency periods in between
@@ -39,13 +39,13 @@ class LeasePaymentsTable extends Component {
     const endDate = new Date(this.props.leaseDetails.endDate);
     while(currentDate < endDate) {
       const oldDate = currentDate;
-      currentDate = utils.incrementCurrentDate(currentDate, frequency);
+      currentDate = dateFunctions.incrementCurrentDate(currentDate, frequency);
       let newRow = {};
       if(currentDate < endDate) {
-        newRow = utils.getMiddleWeek(oldDate, currentDate, frequency, rent);
+        newRow = dateFunctions.getMiddleWeek(oldDate, currentDate, frequency, rent);
       } else {
         // Finally add the last week, calculated up to last date
-        newRow = utils.getLastWeek(oldDate, endDate, frequency, rent);
+        newRow = dateFunctions.getLastWeek(oldDate, endDate, frequency, rent);
       }
       rows.push(newRow);
     }
@@ -73,7 +73,7 @@ class LeasePaymentsTable extends Component {
             <th>From</th>
             <th>To</th>
             <th>Days</th>
-            <th>Amount ($)</th>
+            <th>Amount</th>
           </tr>
         </thead>
         <tbody>
@@ -83,7 +83,7 @@ class LeasePaymentsTable extends Component {
               <td>{row.from}</td>
               <td>{row.to}</td>
               <td>{row.days}</td>
-              <td>{row.amount}</td>
+              <td>${row.amount}</td>
             </tr>
           )
         }

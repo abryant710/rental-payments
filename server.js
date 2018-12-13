@@ -9,10 +9,23 @@ app.use(cors());
 // API end point for the flickr application
 const BASE_URL = 'https://hiring-task-api.herokuapp.com/v1/leases';
 
-// Only route required pointing to API end point
+// Route required for individual leases by id
 app.get('/leases/:id', (req, res) => {
   console.log("PARAMS:", req.params);
   axios.get(`${BASE_URL}/${req.params.id}`)
+  .then(response => {
+    // Render the JSON
+    res.json(response.data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+});
+
+// Route required for all leases
+app.get('/leases', (req, res) => {
+  console.log("PARAMS:", req.params);
+  axios.get(BASE_URL)
   .then(response => {
     // Render the JSON
     res.json(response.data);

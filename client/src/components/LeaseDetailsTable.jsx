@@ -12,7 +12,7 @@ class LeaseDetailsTable extends Component {
             <th>End Date</th>
             <th>Payment Day</th>
             <th>Frequency</th>
-            <th>Rent ($)</th>
+            <th>Rent</th>
           </tr>
         </thead>
         <tbody>
@@ -21,7 +21,7 @@ class LeaseDetailsTable extends Component {
             <td>{this.props.leaseDetails.endDate}</td>
             <td>{this.props.leaseDetails.paymentDay}</td>
             <td>{this.props.leaseDetails.frequency}</td>
-            <td>{this.props.leaseDetails.rent}</td>
+            <td>${this.props.leaseDetails.rent}</td>
           </tr>
         </tbody>
       </table>
