@@ -2,11 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import NavBar from '../components/NavBar';
 import SearchPage from '../components/SearchPage';
-import ListPage from '../components/ListPage';
-import LeaseResult from '../components/LeaseResult';
-import LeasePaymentsTable from '../components/LeasePaymentsTable';
-import LeaseOwnershipTable from '../components/LeaseOwnershipTable';
-import LeaseDetailsTable from '../components/LeaseDetailsTable';
 import ajax from '../lib/ajax';
 import utils from '../lib/utils';
 import dateFunctions from '../lib/dateFunctions';
@@ -22,12 +17,6 @@ it('renders NavBar without crashing', () => {
 it('renders Search without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(<SearchPage />, div);
-  ReactDOM.unmountComponentAtNode(div);
-});
-
-it('renders List without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<ListPage />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
 
@@ -60,27 +49,77 @@ it('can parse out an ID from a query string', () => {
 
 it('Increments date as expected', () => {
   expect.assertions(4);
-  const date = dateFunctions.incrementCurrentDate(new Date('01-01-2018'), 'weekly');
+  const date = dateFunctions.incrementCurrentDate(new Date('2018-01-01'), 'weekly');
   expect(date).toBeInstanceOf(Date);
   expect(date.getMonth()).toEqual(0);
   expect(date.getDate()).toEqual(8);
   expect(date.getYear() + 1900).toEqual(2018);
 });
 
-it('Get cost as expected', () => {
+it('Gets cost as expected', () => {
   expect.assertions(1);
   const cost = dateFunctions.getCost(7, 'fortnightly', 1000);
   expect(cost).toEqual("500.00");
 });
 
-it('Get day of week as expected', () => {
+it('Gets day of week as expected', () => {
   expect.assertions(1);
-  const date = dateFunctions.getDayOfWeek(new Date('12-05-2018'), 3);
+  const date = dateFunctions.getDayOfWeek(new Date('2018-05-12'), 3);
   expect(date.getDay()).toEqual(3);
 });
 
-it('Get calculates correct days between 2 dates', () => {
+it('Calculates correct days between 2 dates', () => {
+  expect.assertions(2);
+  const days1 = dateFunctions.daysBetween(new Date('2018-01-01'), new Date('2018-01-03'), true);
+  const days2 = dateFunctions.daysBetween(new Date('2018-01-01'), new Date('2018-01-03'), false);
+  expect(days1).toEqual(3);
+  expect(days2).toEqual(2);
+});
+
+it('Formats date correctly', () => {
   expect.assertions(1);
-  const days = dateFunctions.daysBetween(new Date('12-05-2018'), new Date('14-05-2018'), true);
-  expect(days).toEqual(3);
+  const date = dateFunctions.getFormattedDate(new Date('2018-01-03'));
+  expect(date).toEqual('January, 3rd 2018');
+});
+
+it('Gets correct date suffix', () => {
+  expect.assertions(4);
+  const st = dateFunctions.datePlusSuffix(1);
+  const nd = dateFunctions.datePlusSuffix(2);
+  const rd = dateFunctions.datePlusSuffix(3);
+  const th = dateFunctions.datePlusSuffix(15);
+  expect(st).toEqual('1st');
+  expect(nd).toEqual('2nd');
+  expect(rd).toEqual('3rd');
+  expect(th).toEqual('15th');
+});
+
+it('Looks up month correctly', () => {
+  expect.assertions(3);
+  const jan = dateFunctions.monthLookup(0);
+  const mar = dateFunctions.monthLookup(2);
+  const dec = dateFunctions.monthLookup(11);
+  expect(jan).toEqual('January');
+  expect(mar).toEqual('March');
+  expect(dec).toEqual('December');
+});
+
+it('Looks up frequency correctly', () => {
+  expect.assertions(3);
+  const weekly = dateFunctions.frequencyLookup('weekly');
+  const fortnightly = dateFunctions.frequencyLookup('fortnightly');
+  const monthly = dateFunctions.frequencyLookup('monthly');
+  expect(weekly).toEqual(7);
+  expect(fortnightly).toEqual(14);
+  expect(monthly).toEqual(28);
+});
+
+it('Looks up day correctly', () => {
+  expect.assertions(3);
+  const sun = dateFunctions.dayOfWeekLookup('sunday');
+  const tues = dateFunctions.dayOfWeekLookup('tuesday');
+  const sat = dateFunctions.dayOfWeekLookup('saturday');
+  expect(sun).toEqual(0);
+  expect(tues).toEqual(2);
+  expect(sat).toEqual(6);
 });
