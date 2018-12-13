@@ -16,6 +16,16 @@ code {
     monospace;
 }
 
+.navBar {
+  display: inline-block;
+}
+
+input {
+  margin-right: 10px;
+}
+
+/* Formatting of tables */
+
 table {
   border-collapse:collapse;
   margin: 20px auto;

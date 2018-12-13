@@ -5,6 +5,8 @@ export default {
   incrementCurrentDate(currentDate, frequency) {
     let result = new Date(currentDate);
     if(frequency === "monthly") {
+      // The spec actually defines monthly as every 4 weeks, therefore this
+      // will always be 28 day intervals
       result.setDate(result.getDate() + 28);
     } else if(frequency === "fortnightly") {
       result.setDate(result.getDate() + 14);
@@ -16,11 +18,9 @@ export default {
 
   // Method to calculate the last partial week
   getLastWeek(startDate, endDate, frequency, rent) {
-    const numberOfDays = this.daysBetween(startDate, endDate, false);
+    const numberOfDays = this.daysBetween(startDate, endDate, true);
 
-    // Return an object containing data about a middle week
-    // Next date required,
-    // to be used to get following periods in next calculation
+    // Return an object containing data about the last
     return {
       from: this.getFormattedDate(startDate),
       to: this.getFormattedDate(endDate),
@@ -37,8 +37,6 @@ export default {
     const numberOfDays = this.daysBetween(startDate, dateBeforePaymentDay, true);
 
     // Return an object containing data about a middle week
-    // Next date required,
-    // to be used to get following periods in next calculation
     return {
       from: this.getFormattedDate(startDate),
       to: this.getFormattedDate(dateBeforePaymentDay),
@@ -51,6 +49,7 @@ export default {
   getFirstWeek(startDate, paymentDay, frequency, rent) {
     let dayBeforePaymentDay;
     const paymentDayNum = this.dayOfWeekLookup(paymentDay);
+    // Need to find out when first payment day is
     if(paymentDayNum === 0) {
       dayBeforePaymentDay = 6;
     } else {
@@ -58,10 +57,11 @@ export default {
     }
     const paymentDate = this.getDayOfWeek(startDate, paymentDayNum);
     const dateBeforePaymentDay = this.getDayOfWeek(startDate, dayBeforePaymentDay);
-    // console.log(dateBeforePaymentDay);
     const numberOfDays = this.daysBetween(startDate, dateBeforePaymentDay, true);
 
     // Return an object containing data about the first week
+    // Next date required,
+    // to be used to get following periods in next calculation
     return {
       from: this.getFormattedDate(startDate),
       to: this.getFormattedDate(dateBeforePaymentDay),
@@ -75,6 +75,7 @@ export default {
   getCost(numberOfDays, frequency, rent) {
     const freqAmount = this.frequencyLookup(frequency);
     const rentAmount =  (numberOfDays / freqAmount) * rent;
+    // Return ammount to 3 decimal places in all cases
     return parseFloat(Math.round(rentAmount * 100) / 100).toFixed(2);
   },
 
@@ -92,7 +93,8 @@ export default {
     // Add one to include the end date in the result (if necessary)
     let result = (endDate - startDate) / millisecondsPerDay;
     result = includeLastDay ? result + 1 : result;
-    return Math.ceil(result);
+    // Need to return as a whole number in case of rounding inaccuracy
+    return Math.round(result);
   },
 
   // Format date as per specification (e.g. August, 3rd 2018)
@@ -156,7 +158,9 @@ export default {
       case "fortnightly":
         return 14;
       case "monthly":
-        return 365/12;
+      // The spec actually defines monthly as every 4 weeks, therefore this
+      // will always be 28 day intervals
+        return 28;
       default:
         return NaN;
     }

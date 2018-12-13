@@ -34,7 +34,7 @@ class LeasePaymentsTable extends Component {
     const firstRow = utils.getFirstWeek(startDate, paymentDay, frequency, rent);
     rows.push(firstRow);
 
-    // Then calculate all full months in between
+    // Then calculate all full frequency periods in between
     let currentDate = firstRow.nextDate;
     const endDate = new Date(this.props.leaseDetails.endDate);
     while(currentDate < endDate) {
@@ -44,11 +44,13 @@ class LeasePaymentsTable extends Component {
       if(currentDate < endDate) {
         newRow = utils.getMiddleWeek(oldDate, currentDate, frequency, rent);
       } else {
+        // Finally add the last week, calculated up to last date
         newRow = utils.getLastWeek(oldDate, endDate, frequency, rent);
       }
       rows.push(newRow);
     }
 
+    // Set the state to re-render the data in the table
     this.setState({
       rows: rows
     });
@@ -56,6 +58,7 @@ class LeasePaymentsTable extends Component {
 
   render(){
 
+    // Indicate no data if no rows can be calculated
     if(!this.state.rows.length) {
       return(
         <p>No data to show</p>
