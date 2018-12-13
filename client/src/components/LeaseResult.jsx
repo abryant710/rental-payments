@@ -12,9 +12,7 @@ class LeaseResult extends Component {
   // This is a built-in 'lifecycle method'. When defined it, it will
   // be run when this component is actually added to the DOM
   componentDidMount(){
-    // console.log(this.props.location.search);
     const leaseId = utils.parseOutLeaseId(this.props.location.search);
-    // console.log("leaseId:", leaseId);
     // do AJAX request here and update state with results
     this.updateResults(leaseId);
   }
@@ -41,7 +39,7 @@ class LeaseResult extends Component {
       loading: true
     });
 
-    ajax.getRentalData(leaseId)
+    ajax.getSingleRentData(leaseId)
     .then( response => {
       // Run the callback function when the response is ready,
       // i.e. SUCCESS
@@ -79,7 +77,7 @@ class LeaseResult extends Component {
       <div>
         {componentTitle}
         <LeaseDetailsTable leaseDetails={this.state} />
-        <LeasePaymentsTable />
+        <LeasePaymentsTable leaseDetails={this.state} />
       </div>
     );
   }

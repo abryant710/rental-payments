@@ -5,8 +5,16 @@ const LOCAL_NODE_BASE_URL = 'http://localhost:5000';
 
 export default {
 
-  getRentalData(leaseId) {
+  // Return for 1 result
+  getSingleRentData(leaseId) {
     const url = `${LOCAL_NODE_BASE_URL}/leases/${leaseId}`;
+    // console.log("url: ", url);
+    return axios.get(url);
+  },
+
+  // Return all results
+  getAllRentData() {
+    const url = `${LOCAL_NODE_BASE_URL}/leases`;
     // console.log("url: ", url);
     return axios.get(url);
   }

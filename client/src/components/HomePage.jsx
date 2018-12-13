@@ -11,13 +11,13 @@ class HomePage extends Component {
   }
 
   // Set the state whenever the user updates the ID
-  handleInput( event ){
-    console.log( event.target.value );
+  handleInput(event){
+    console.log(event.target.value);
     this.setState({ leaseId: event.target.value });
   }
 
   // Handle submission of the form when a user wants query an ID
-  handleSubmit( event ){
+  handleSubmit(event){
     event.preventDefault(); // prevent form submit from causing reload of page
     this.props.history.push({
       pathname: '/leases.html',
@@ -26,7 +26,7 @@ class HomePage extends Component {
   }
 
   // Handle submission of the form when a user wants to go to home page
-  homePage( event ){
+  homePage(event){
     event.preventDefault(); // prevent form submit from causing reload of page
     this.props.history.push(`/`);
   }
