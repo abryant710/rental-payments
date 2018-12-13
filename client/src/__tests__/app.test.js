@@ -24,14 +24,29 @@ it('renders Search without crashing', () => {
 
 it('returns valid json from API with ID', () => {
   expect.assertions(1);
-  return ajax.getSingleRentData('lease-a').then(response => {
+  return ajax.getSingleRentData('lease-a', 'standard').then(response => {
     expect(response.data.id).toBe('lease-a');
   });
 });
 
 it('returns valid json from API without ID', () => {
   expect.assertions(2);
-  return ajax.getAllRentLeases().then(response => {
+  return ajax.getAllRentLeases('standard').then(response => {
+    expect(response.data.length).toEqual(3);
+    expect(response.data[0].id).toContain('lease-');
+  });
+});
+
+it('returns valid json from CUSTOM API with ID', () => {
+  expect.assertions(1);
+  return ajax.getSingleRentData('lease-a', 'custom').then(response => {
+    expect(response.data.id).toBe('lease-a');
+  });
+});
+
+it('returns valid json from CUSTOM API without ID', () => {
+  expect.assertions(2);
+  return ajax.getAllRentLeases('custom').then(response => {
     expect(response.data.length).toEqual(3);
     expect(response.data[0].id).toContain('lease-');
   });
@@ -43,6 +58,12 @@ it('can parse out an ID from a query string', () => {
   expect.assertions(1);
   const id = utils.parseOutLeaseId('?leaseId=lease-a');
   expect(id).toEqual('lease-a');
+});
+
+it('can parse out api type from a query string', () => {
+  expect.assertions(1);
+  const type = utils.parseOutAPIStr('?api=custom');
+  expect(type).toEqual('custom');
 });
 
 // Date Processing
@@ -68,7 +89,7 @@ it('Gets day of week as expected', () => {
   expect(date.getDay()).toEqual(3);
 });
 
-it('Calculates correct days between 2 dates', () => {
+it('Calculates correct number of days between 2 dates', () => {
   expect.assertions(2);
   const days1 = dateFunctions.daysBetween(new Date('2018-01-01'), new Date('2018-01-03'), true);
   const days2 = dateFunctions.daysBetween(new Date('2018-01-01'), new Date('2018-01-03'), false);
@@ -76,7 +97,7 @@ it('Calculates correct days between 2 dates', () => {
   expect(days2).toEqual(2);
 });
 
-it('Formats date correctly', () => {
+it('Formats date correctly (as per specification)', () => {
   expect.assertions(1);
   const date = dateFunctions.getFormattedDate(new Date('2018-01-03'));
   expect(date).toEqual('January, 3rd 2018');

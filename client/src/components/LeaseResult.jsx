@@ -10,8 +10,9 @@ class LeaseResult extends Component {
   // be run when this component is actually added to the DOM
   componentDidMount(){
     const leaseId = utils.parseOutLeaseId(this.props.location.search);
+    const apiType = utils.parseOutAPIStr(this.props.location.search);
     // do AJAX request here and update state with results
-    this.updateResults(leaseId);
+    this.updateResults(leaseId, apiType);
   }
 
   constructor(){
@@ -30,14 +31,14 @@ class LeaseResult extends Component {
     this.updateResults = this.updateResults.bind(this);
   }
 
-  updateResults(leaseId){
+  updateResults(leaseId, apiType){
 
     // Set state here to show to the user the app is loading again
     this.setState({
       loading: true
     });
 
-    ajax.getSingleRentData(leaseId)
+    ajax.getSingleRentData(leaseId, apiType)
     .then( response => {
       // Run the callback function when the response is ready,
       // i.e. SUCCESS

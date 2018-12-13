@@ -6,16 +6,18 @@ const LOCAL_NODE_BASE_URL = 'http://localhost:5000';
 export default {
 
   // Return for 1 result
-  getSingleRentData(leaseId) {
-    const url = `${LOCAL_NODE_BASE_URL}/leases/${leaseId}`;
-    // console.log("url: ", url);
+  getSingleRentData(leaseId, apiType) {
+    const url = apiType === 'standard' ? `${LOCAL_NODE_BASE_URL}/leases/${leaseId}` :
+    `${LOCAL_NODE_BASE_URL}/custom/leases/${leaseId}`;
+    //console.log(url);
     return axios.get(url);
   },
 
   // Return all results
-  getAllRentLeases() {
-    const url = `${LOCAL_NODE_BASE_URL}/leases`;
-    // console.log("url: ", url);
+  getAllRentLeases(apiType) {
+    const url = apiType === 'standard' ? `${LOCAL_NODE_BASE_URL}/leases` :
+    `${LOCAL_NODE_BASE_URL}/custom/leases`;
+    //console.log(url);
     return axios.get(url);
   }
 

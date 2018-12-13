@@ -1,5 +1,7 @@
 # Rental Payments App
 
+### Overview
+
 This application is built using the supplied API endpoints:
 
 * https://hiring-task-api.herokuapp.com/v1/leases
@@ -12,7 +14,9 @@ Custom replicas of these API endpoints have also been created within the Node JS
 * https://localhost:5000/custom/leases
 * https://localhost:5000/custom/leases/:id
 
-### User journey for the application
+All API calls are filtered through the Node Server to avoid CORS problems.
+
+### App User Journey
 
 From the root location the user is presented with 2 options:
 
@@ -24,7 +28,11 @@ On this page the user should enter the lease ID they are looking for and should 
 
 On this page a list is returned matching lease IDs with tenant name. These links are clickable and will take the user to the rental information page as explained above under 'Search for a lease by ID'.
 
-### Starting Node server
+* Bonus task 2 options
+
+The user can also selected to use the locally implemented version of the API, or the standard live one using the radio button options.
+
+### Starting Node Server
 
 From the root folder run:
 
@@ -48,7 +56,7 @@ Open the application in the Browser using:
 
 `http://localhost:3000/`
 
-### Run unit tests
+### Run Unit Tests
 
 Change directory to the client folder and run
 

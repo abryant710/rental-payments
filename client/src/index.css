@@ -17,6 +17,15 @@ code {
 
 /* Custom styling */
 
+.radio {
+  margin: 20px 8px 20px 20px;
+}
+
+.textField {
+  background-color: #FFF;
+  border: 1px solid lightblue;
+}
+
 .strongText {
   color: #2222DD;
 }

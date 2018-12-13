@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import utils from '../lib/utils.js';
 
-class HomePage extends Component {
+class SearchPage extends Component {
 
   constructor(){
     super();
@@ -29,7 +29,7 @@ class HomePage extends Component {
       <div>
         <h3>Find Lease by Lease ID:</h3>
         <form onSubmit={ ev => this.handleSubmit(ev) }>
-          <input type="text" onChange={ ev => this.handleInput(ev) } />
+          <input className="textField" type="text" onChange={ ev => this.handleInput(ev) } />
           <input type="submit" value="Find" />
         </form>
       </div>
@@ -38,4 +38,4 @@ class HomePage extends Component {
 
 }
 
-export default HomePage;
+export default SearchPage;

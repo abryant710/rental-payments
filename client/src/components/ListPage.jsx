@@ -12,7 +12,9 @@ class ListPage extends Component {
   // be run when this component is actually added to the DOM
   componentDidMount(){
     // do AJAX request here and update state with results
-    this.updateList();
+    const apiType = utils.parseOutAPIStr(this.props.history.location.search);
+    console.log(apiType);
+    this.updateList(apiType);
   }
 
   constructor(){
@@ -28,14 +30,14 @@ class ListPage extends Component {
   }
 
   // AJAX to get the list of tenants
-  updateList(){
+  updateList(apiType){
 
     // Set state here to show to the user the app is loading again
     this.setState({
       loading: true
     });
 
-    ajax.getAllRentLeases()
+    ajax.getAllRentLeases(apiType)
     .then( response => {
       // Run the callback function when the response is ready,
       // i.e. SUCCESS
