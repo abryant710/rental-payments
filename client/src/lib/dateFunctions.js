@@ -1,5 +1,6 @@
 export default {
 
+  //// SHOULD REFACTOR BELOW FOR GENERAL CASE ////
   // Add to the date depending on the frequency so that it
   // can be checked if period has gone past last date
   incrementCurrentDate(currentDate, frequency) {
@@ -16,6 +17,7 @@ export default {
     return result;
   },
 
+  //// TODO NEED TO REFACTOR THESE THREE METHODS TO GET ONE GENERAL METHOD ////
   // Method to calculate the last partial week
   getLastWeek(startDate, endDate, frequency, rent) {
     const numberOfDays = this.daysBetween(startDate, endDate, true);
@@ -33,6 +35,7 @@ export default {
   // days as per frequency of payments
   getMiddleWeek(startDate, nextDate, frequency, rent) {
     let dateBeforePaymentDay = new Date(nextDate.getTime());
+    // Subtract 1 from this date to get the day before
     dateBeforePaymentDay.setDate(nextDate.getDate() - 1);
     const numberOfDays = this.daysBetween(startDate, dateBeforePaymentDay, true);
 
