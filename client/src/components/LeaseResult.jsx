@@ -60,7 +60,6 @@ class LeaseResult extends Component {
 
   }
 
-
   render(){
 
     //Return loading if the API data is still being fetched
@@ -76,7 +75,9 @@ class LeaseResult extends Component {
     return (
       <div>
         {ComponentTitle}
+        <h4>Summary:</h4>
         <LeaseDetailsTable leaseDetails={this.state} />
+        <h4>Payments Due:</h4>
         <LeasePaymentsTable leaseDetails={this.state} />
       </div>
     );

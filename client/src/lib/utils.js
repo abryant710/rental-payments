@@ -1,19 +1,44 @@
 export default {
 
-  // Method to calculate the first partial week
-  getMiddleWeek(startDate, paymentDay, frequency, rent) {
-    let dayBeforePaymentDay;
-    const paymentDayNum = this.dayOfWeekLookup(paymentDay);
-    if(paymentDayNum === 0) {
-      dayBeforePaymentDay = 6;
-    } else {
-      dayBeforePaymentDay = paymentDayNum - 1;
+  // Add to the date depending on the frequency so that it
+  // can be checked if period has gone past last date
+  incrementCurrentDate(currentDate, frequency) {
+    let result = new Date(currentDate);
+    if(frequency === "monthly") {
+      result.setDate(result.getDate() + 28);
+    } else if(frequency === "fortnightly") {
+      result.setDate(result.getDate() + 14);
+    } else if(frequency === "weekly") {
+      result.setDate(result.getDate() + 7);
     }
-    const dateBeforePaymentDay = this.getNextDayOfWeek(startDate, dayBeforePaymentDay);
-    console.log(dateBeforePaymentDay);
+    return result;
+  },
+
+  // Method to calculate the last partial week
+  getLastWeek(startDate, endDate, frequency, rent) {
+    const numberOfDays = this.daysBetween(startDate, endDate, false);
+
+    // Return an object containing data about a middle week
+    // Next date required,
+    // to be used to get following periods in next calculation
+    return {
+      from: this.getFormattedDate(startDate),
+      to: this.getFormattedDate(endDate),
+      days: numberOfDays,
+      amount: this.getCost(numberOfDays, frequency, rent)
+    };
+  },
+
+  // Method to calculate a week in the middle with full number of
+  // days as per frequency of payments
+  getMiddleWeek(startDate, nextDate, frequency, rent) {
+    let dateBeforePaymentDay = new Date(nextDate.getTime());
+    dateBeforePaymentDay.setDate(nextDate.getDate() - 1);
     const numberOfDays = this.daysBetween(startDate, dateBeforePaymentDay, true);
 
-    // Return an object containing data about the first week
+    // Return an object containing data about a middle week
+    // Next date required,
+    // to be used to get following periods in next calculation
     return {
       from: this.getFormattedDate(startDate),
       to: this.getFormattedDate(dateBeforePaymentDay),
@@ -31,8 +56,9 @@ export default {
     } else {
       dayBeforePaymentDay = paymentDayNum - 1;
     }
-    const dateBeforePaymentDay = this.getNextDayOfWeek(startDate, dayBeforePaymentDay);
-    console.log(dateBeforePaymentDay);
+    const paymentDate = this.getDayOfWeek(startDate, paymentDayNum);
+    const dateBeforePaymentDay = this.getDayOfWeek(startDate, dayBeforePaymentDay);
+    // console.log(dateBeforePaymentDay);
     const numberOfDays = this.daysBetween(startDate, dateBeforePaymentDay, true);
 
     // Return an object containing data about the first week
@@ -40,7 +66,8 @@ export default {
       from: this.getFormattedDate(startDate),
       to: this.getFormattedDate(dateBeforePaymentDay),
       days: numberOfDays,
-      amount: this.getCost(numberOfDays, frequency, rent)
+      amount: this.getCost(numberOfDays, frequency, rent),
+      nextDate: paymentDate
     };
   },
 
@@ -48,13 +75,12 @@ export default {
   getCost(numberOfDays, frequency, rent) {
     const freqAmount = this.frequencyLookup(frequency);
     const rentAmount =  (numberOfDays / freqAmount) * rent;
-    //console.log(numberOfDays, freqAmount, rent, rentAmount);
     return parseFloat(Math.round(rentAmount * 100) / 100).toFixed(2);
   },
 
   // Find the next date given a day of the week
   // e.g. from Sat May 12 2018 find the next Tuesday, i.e. Tue May 15 2018
-  getNextDayOfWeek(date, dayOfWeek) {
+  getDayOfWeek(date, dayOfWeek) {
     let resultDate = new Date(date.getTime());
     resultDate.setDate(date.getDate() + (7 + dayOfWeek - date.getDay()) % 7);
     return resultDate;
@@ -66,7 +92,7 @@ export default {
     // Add one to include the end date in the result (if necessary)
     let result = (endDate - startDate) / millisecondsPerDay;
     result = includeLastDay ? result + 1 : result;
-    return result;
+    return Math.ceil(result);
   },
 
   // Format date as per specification (e.g. August, 3rd 2018)

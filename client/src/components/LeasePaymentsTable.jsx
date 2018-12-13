@@ -34,19 +34,20 @@ class LeasePaymentsTable extends Component {
     const firstRow = utils.getFirstWeek(startDate, paymentDay, frequency, rent);
     rows.push(firstRow);
 
-    // const endDate = new Date(this.props.leaseDetails.endDate);
-    // // Calculate the number of days between first
-    // const totalDays = utils.daysBetween(startDate, endDate);
-    // const frequency = this.props.leaseDetails.frequency;
-    // // Check if total is higher than frequency
-    // if(totalDays > frequency) {
-    //
-    // }
-    // const rent = this.props.leaseDetails.rent;
-    // console.log(startDate, utils.getFormattedDate(startDate));
-    // console.log(endDate, utils.getFormattedDate(endDate));
-    // console.log(utils.dayOfWeekLookup(paymentDay));
-    // console.log(utils.daysBetween(startDate, endDate));
+    // Then calculate all full months in between
+    let currentDate = firstRow.nextDate;
+    const endDate = new Date(this.props.leaseDetails.endDate);
+    while(currentDate < endDate) {
+      const oldDate = currentDate;
+      currentDate = utils.incrementCurrentDate(currentDate, frequency);
+      let newRow = {};
+      if(currentDate < endDate) {
+        newRow = utils.getMiddleWeek(oldDate, currentDate, frequency, rent);
+      } else {
+        newRow = utils.getLastWeek(oldDate, endDate, frequency, rent);
+      }
+      rows.push(newRow);
+    }
 
     this.setState({
       rows: rows
