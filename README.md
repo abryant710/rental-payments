@@ -2,8 +2,8 @@
 
 This application is built using the API endpoints:
 
-https://hiring-task-api.herokuapp.com/v1/leases
-https://hiring-task-api.herokuapp.com/v1/leases/:id
+* https://hiring-task-api.herokuapp.com/v1/leases
+* https://hiring-task-api.herokuapp.com/v1/leases/:id
 
 It was built using Node as a server and React for the user interface.
 

@@ -18,6 +18,14 @@ code {
 
 /* Custom styling */
 
+h1, .strongText {
+  color: #4444BB;
+}
+
+h3 {
+  color: black;
+}
+
 .leaseLink {
   text-decoration: underline;
   color: blue;
@@ -28,14 +36,10 @@ code {
   display: inline-block;
 }
 
-.strongText {
-  color: black;
-  text-decoration: underline;
-}
 
 input {
   margin: 5px;
-  background-color: #DDD;
+  background-color: lightblue;
   border: none;
   color: #333;
   padding: 7px;
@@ -59,9 +63,9 @@ th, td {
 }
 
 th {
-  background-color: #DDD;
+  background-color: #CCCCFF;
 }
 
 td {
-  background-color: #FFF;
+  background-color: #DDEEFF;
 }
