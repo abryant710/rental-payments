@@ -1,5 +1,6 @@
 export default {
 
+  // COULD COMBINE BELOW 2 FUNCTIONS AND PASS IN REGEX
   // Parse the query out of the search term
   parseOutLeaseId(searchTerm) {
     const regex = /leaseId=([\w|-]+)/;
