@@ -6,7 +6,9 @@ class LeasePaymentsTable extends Component {
   constructor(){
     super();
 
+    // Store the table rows in state so it rerenders after each call
     this.state = {
+      totalDays: 0,
       rows: []
     }
   }
@@ -22,15 +24,33 @@ class LeasePaymentsTable extends Component {
 
   // Get data to populate Rows
   calculateRows() {
+    const rows = [];
+    // First find the difference for the first payment
     const startDate = new Date(this.props.leaseDetails.startDate);
-    const endDate = new Date(this.props.leaseDetails.endDate);
     const paymentDay = this.props.leaseDetails.paymentDay;
-
-    const frequency = this.props.leaseDetails.frequency;
     const rent = this.props.leaseDetails.rent;
-    console.log(startDate, utils.getFormattedDate(startDate));
-    console.log(endDate, utils.getFormattedDate(endDate));
-    console.log(utils.dayOfWeekLookup(paymentDay));
+    const frequency = this.props.leaseDetails.frequency;
+    // Add first Row
+    const firstRow = utils.getFirstWeek(startDate, paymentDay, frequency, rent);
+    rows.push(firstRow);
+
+    // const endDate = new Date(this.props.leaseDetails.endDate);
+    // // Calculate the number of days between first
+    // const totalDays = utils.daysBetween(startDate, endDate);
+    // const frequency = this.props.leaseDetails.frequency;
+    // // Check if total is higher than frequency
+    // if(totalDays > frequency) {
+    //
+    // }
+    // const rent = this.props.leaseDetails.rent;
+    // console.log(startDate, utils.getFormattedDate(startDate));
+    // console.log(endDate, utils.getFormattedDate(endDate));
+    // console.log(utils.dayOfWeekLookup(paymentDay));
+    // console.log(utils.daysBetween(startDate, endDate));
+
+    this.setState({
+      rows: rows
+    });
   }
 
   render(){
@@ -41,6 +61,7 @@ class LeasePaymentsTable extends Component {
       );
     }
 
+    // Map over the rows calclated from the above
     return (
       <table>
         <thead>
@@ -52,7 +73,16 @@ class LeasePaymentsTable extends Component {
           </tr>
         </thead>
         <tbody>
-
+        {
+          this.state.rows.map( row =>
+            <tr key={row.from}>
+              <td>{row.from}</td>
+              <td>{row.to}</td>
+              <td>{row.days}</td>
+              <td>{row.amount}</td>
+            </tr>
+          )
+        }
         </tbody>
       </table>
     );

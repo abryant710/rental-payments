@@ -5,7 +5,7 @@ import ajax from '../lib/ajax.js';
 import utils from '../lib/utils.js';
 
 // Define the component title in one place
-const componentTitle = <h2>Lease Result Data</h2>;
+const ComponentTitle = <h2>Lease Result Data</h2>;
 
 class LeaseResult extends Component {
 
@@ -67,7 +67,7 @@ class LeaseResult extends Component {
     if(this.state.loading) {
       return(
         <div>
-          {componentTitle}
+          {ComponentTitle}
           <p>Loading...</p>
         </div>
       );
@@ -75,7 +75,7 @@ class LeaseResult extends Component {
 
     return (
       <div>
-        {componentTitle}
+        {ComponentTitle}
         <LeaseDetailsTable leaseDetails={this.state} />
         <LeasePaymentsTable leaseDetails={this.state} />
       </div>

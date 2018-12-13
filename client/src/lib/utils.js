@@ -1,11 +1,80 @@
 export default {
 
-  // Format date as per specification
+  // Method to calculate the first partial week
+  getMiddleWeek(startDate, paymentDay, frequency, rent) {
+    let dayBeforePaymentDay;
+    const paymentDayNum = this.dayOfWeekLookup(paymentDay);
+    if(paymentDayNum === 0) {
+      dayBeforePaymentDay = 6;
+    } else {
+      dayBeforePaymentDay = paymentDayNum - 1;
+    }
+    const dateBeforePaymentDay = this.getNextDayOfWeek(startDate, dayBeforePaymentDay);
+    console.log(dateBeforePaymentDay);
+    const numberOfDays = this.daysBetween(startDate, dateBeforePaymentDay, true);
+
+    // Return an object containing data about the first week
+    return {
+      from: this.getFormattedDate(startDate),
+      to: this.getFormattedDate(dateBeforePaymentDay),
+      days: numberOfDays,
+      amount: this.getCost(numberOfDays, frequency, rent)
+    };
+  },
+
+  // Method to calculate the first partial week
+  getFirstWeek(startDate, paymentDay, frequency, rent) {
+    let dayBeforePaymentDay;
+    const paymentDayNum = this.dayOfWeekLookup(paymentDay);
+    if(paymentDayNum === 0) {
+      dayBeforePaymentDay = 6;
+    } else {
+      dayBeforePaymentDay = paymentDayNum - 1;
+    }
+    const dateBeforePaymentDay = this.getNextDayOfWeek(startDate, dayBeforePaymentDay);
+    console.log(dateBeforePaymentDay);
+    const numberOfDays = this.daysBetween(startDate, dateBeforePaymentDay, true);
+
+    // Return an object containing data about the first week
+    return {
+      from: this.getFormattedDate(startDate),
+      to: this.getFormattedDate(dateBeforePaymentDay),
+      days: numberOfDays,
+      amount: this.getCost(numberOfDays, frequency, rent)
+    };
+  },
+
+  // Return the cost given a certain number of days between 2 dates
+  getCost(numberOfDays, frequency, rent) {
+    const freqAmount = this.frequencyLookup(frequency);
+    const rentAmount =  (numberOfDays / freqAmount) * rent;
+    //console.log(numberOfDays, freqAmount, rent, rentAmount);
+    return parseFloat(Math.round(rentAmount * 100) / 100).toFixed(2);
+  },
+
+  // Find the next date given a day of the week
+  // e.g. from Sat May 12 2018 find the next Tuesday, i.e. Tue May 15 2018
+  getNextDayOfWeek(date, dayOfWeek) {
+    let resultDate = new Date(date.getTime());
+    resultDate.setDate(date.getDate() + (7 + dayOfWeek - date.getDay()) % 7);
+    return resultDate;
+  },
+
+  // Calculate days between 2 dates
+  daysBetween(startDate, endDate, includeLastDay) {
+    const millisecondsPerDay = 24 * 60 * 60 * 1000;
+    // Add one to include the end date in the result (if necessary)
+    let result = (endDate - startDate) / millisecondsPerDay;
+    result = includeLastDay ? result + 1 : result;
+    return result;
+  },
+
+  // Format date as per specification (e.g. August, 3rd 2018)
   getFormattedDate(date) {
     return `${this.monthLookup(date.getMonth())}, ${this.datePlusSuffix(date.getDate())} ${date.getYear() + 1900}`;
   },
 
-  // Get Suffixed date
+  // Get Suffixed date (based on variance in English language for numbers)
   datePlusSuffix(dateNum) {
     const stSuf = [1, 21, 31];
     const ndSuf = [2, 22];
@@ -50,6 +119,20 @@ export default {
        return "December";
       default:
         return "Out of Scope";
+    }
+  },
+
+  // Lookup the scaler for payment amounts based on frequency
+  frequencyLookup(freq) {
+    switch(freq) {
+      case "weekly":
+       return 7;
+      case "fortnightly":
+        return 14;
+      case "monthly":
+        return 365/12;
+      default:
+        return NaN;
     }
   },
 
