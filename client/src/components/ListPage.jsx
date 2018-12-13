@@ -39,7 +39,7 @@ class ListPage extends Component {
     .then( response => {
       // Run the callback function when the response is ready,
       // i.e. SUCCESS
-      console.log('response:', response.data);
+      // console.log('response:', response.data);
       this.setState({
         loading: false,
         list: response.data
