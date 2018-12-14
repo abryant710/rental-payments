@@ -83,12 +83,6 @@ it('Gets cost as expected', () => {
   expect(cost).toEqual("500.00");
 });
 
-it('Gets day of week as expected', () => {
-  expect.assertions(1);
-  const date = dateFunctions.getDayOfWeek(new Date('2018-05-12'), 3);
-  expect(date.getDay()).toEqual(3);
-});
-
 it('Calculates correct number of days between 2 dates', () => {
   expect.assertions(2);
   const days1 = dateFunctions.daysBetween(new Date('2018-01-01'), new Date('2018-01-03'), true);
@@ -145,36 +139,13 @@ it('Looks up day correctly', () => {
   expect(sat).toEqual(6);
 });
 
-it('Gets first week correctly', () => {
+it('Gets payment period correctly', () => {
   expect.assertions(1);
-  const result = dateFunctions.getFirstWeek(new Date('2018-12-13'), 'sunday', 'weekly', 350);
+  const result = dateFunctions.getPaymentPeriod(new Date('2018-12-13'), new Date('2018-12-15'), 7, 1400);
   expect(result).toEqual({
     from: 'December, 13th 2018',
     to: 'December, 15th 2018',
-    days: 3,
-    amount: '150.00',
-    nextDate: new Date('2018-12-16')
-  });
-});
-
-it('Gets middle week correctly', () => {
-  expect.assertions(1);
-  const result = dateFunctions.getMiddleWeek(new Date('2018-12-13'), new Date('2018-12-27'), 'fortnightly', 1000);
-  expect(result).toEqual({
-    from: 'December, 13th 2018',
-    to: 'December, 26th 2018',
-    days: 14,
-    amount: '1000.00',
-  });
-});
-
-it('Gets last week correctly', () => {
-  expect.assertions(1);
-  const result = dateFunctions.getLastWeek(new Date('2018-12-13'), new Date('2018-12-15'), 'fortnightly', 1400);
-  expect(result).toEqual({
-    from: 'December, 13th 2018',
-    to: 'December, 15th 2018',
-    days: 3,
-    amount: '300.00',
+    days: 7,
+    amount: '1400.00',
   });
 });

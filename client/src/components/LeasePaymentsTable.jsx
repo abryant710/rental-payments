@@ -24,28 +24,49 @@ class LeasePaymentsTable extends Component {
 
   // Get data to populate Rows
   calculateRows() {
+    // Value to set to state for re-rendering
     const rows = [];
     // First find the difference for the first payment
+    // Get values from props first
     const startDate = new Date(this.props.leaseDetails.startDate);
     const paymentDay = this.props.leaseDetails.paymentDay;
     const rent = this.props.leaseDetails.rent;
     const frequency = this.props.leaseDetails.frequency;
+    const endDate = new Date(this.props.leaseDetails.endDate);
+
+    // Track number of days and associated cost for different conditions
+    let numberOfDays = 0;
+    let cost = 0;
+
     // Add first Row
-    const firstRow = dateFunctions.getFirstWeek(startDate, paymentDay, frequency, rent);
-    rows.push(firstRow);
+    const firstOfficialPayDate = dateFunctions.getPayDate(startDate, dateFunctions.dayOfWeekLookup(paymentDay));
+    const dateBeforeOfficialPayDate = dateFunctions.getDateBeforeThis(firstOfficialPayDate);
+    //console.log(startDate, paymentDay, firstOfficialPayDate, dateBeforeOfficialPayDate);
+    if (startDate !== firstOfficialPayDate) {
+      //console.log("---startDate different to firstOfficialPayDate");
+      numberOfDays = dateFunctions.daysBetween(startDate, dateBeforeOfficialPayDate, true);
+      cost = dateFunctions.getCost(numberOfDays, frequency, rent);
+      //console.log("numberOfDays", numberOfDays);
+      //console.log("cost", cost);
+      const firstRow = dateFunctions.getPaymentPeriod(startDate, dateBeforeOfficialPayDate, numberOfDays, cost);
+      rows.push(firstRow);
+    } // Don't push anything if the start date is same day of the week as paymentDay
 
     // Then calculate all full frequency periods in between
-    let currentDate = firstRow.nextDate;
-    const endDate = new Date(this.props.leaseDetails.endDate);
+    let currentDate = firstOfficialPayDate;
+    numberOfDays = dateFunctions.frequencyLookup(frequency);
+    cost = dateFunctions.getCost(numberOfDays, frequency, rent);
     while(currentDate < endDate) {
       const oldDate = currentDate;
       currentDate = dateFunctions.incrementCurrentDate(currentDate, frequency);
       let newRow = {};
       if(currentDate < endDate) {
-        newRow = dateFunctions.getMiddleWeek(oldDate, currentDate, frequency, rent);
+        newRow = dateFunctions.getPaymentPeriod(oldDate, currentDate, numberOfDays, cost);
       } else {
         // Finally add the last week, calculated up to last date
-        newRow = dateFunctions.getLastWeek(oldDate, endDate, frequency, rent);
+        numberOfDays = dateFunctions.daysBetween(oldDate, endDate, true);
+        cost = dateFunctions.getCost(numberOfDays, frequency, rent);
+        newRow = dateFunctions.getPaymentPeriod(oldDate, endDate, numberOfDays, cost);
       }
       rows.push(newRow);
     }

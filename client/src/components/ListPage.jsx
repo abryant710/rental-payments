@@ -13,7 +13,7 @@ class ListPage extends Component {
   componentDidMount(){
     // do AJAX request here and update state with results
     const apiType = utils.parseOutFirstTerm(this.props.history.location.search, apiTypeRegex);
-    console.log(apiType);
+    // console.log(apiType);
     this.updateList(apiType);
   }
 

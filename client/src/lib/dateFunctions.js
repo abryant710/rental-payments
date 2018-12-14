@@ -1,6 +1,5 @@
 export default {
 
-  //// SHOULD REFACTOR BELOW FOR GENERAL CASE ////
   // Add to the date depending on the frequency so that it
   // can be checked if period has gone past last date
   incrementCurrentDate(currentDate, frequency) {
@@ -8,69 +7,25 @@ export default {
     if(frequency === "monthly") {
       // The spec actually defines monthly as every 4 weeks, therefore this
       // will always be 28 day intervals
-      result.setDate(result.getDate() + 28);
+      result.setDate(result.getDate() + this.frequencyLookup("monthly"));
     } else if(frequency === "fortnightly") {
-      result.setDate(result.getDate() + 14);
+      result.setDate(result.getDate() + this.frequencyLookup("fortnightly"));
     } else if(frequency === "weekly") {
-      result.setDate(result.getDate() + 7);
+      result.setDate(result.getDate() + this.frequencyLookup("weekly"));
+    } else {
+      // Otherwise expect a raw number, which doesn't require a lookup
+      result.setDate(result.getDate() + frequency);
     }
     return result;
   },
 
-  //// TODO NEED TO REFACTOR THESE THREE METHODS TO GET ONE GENERAL METHOD ////
-  // Method to calculate the last partial week
-  getLastWeek(startDate, endDate, frequency, rent) {
-    const numberOfDays = this.daysBetween(startDate, endDate, true);
-
-    // Return an object containing data about the last
+  // Method to calculate any period of day returning object to display as row
+  getPaymentPeriod(startDate, endDate, numberOfDays, cost) {
     return {
       from: this.getFormattedDate(startDate),
       to: this.getFormattedDate(endDate),
       days: numberOfDays,
-      amount: this.getCost(numberOfDays, frequency, rent)
-    };
-  },
-
-  // Method to calculate a week in the middle with full number of
-  // days as per frequency of payments
-  getMiddleWeek(startDate, nextDate, frequency, rent) {
-    let dateBeforePaymentDay = new Date(nextDate.getTime());
-    // Subtract 1 from this date to get the day before
-    dateBeforePaymentDay.setDate(nextDate.getDate() - 1);
-    const numberOfDays = this.daysBetween(startDate, dateBeforePaymentDay, true);
-
-    // Return an object containing data about a middle week
-    return {
-      from: this.getFormattedDate(startDate),
-      to: this.getFormattedDate(dateBeforePaymentDay),
-      days: numberOfDays,
-      amount: this.getCost(numberOfDays, frequency, rent)
-    };
-  },
-
-  // Method to calculate the first partial week
-  getFirstWeek(startDate, paymentDay, frequency, rent) {
-    let dayBeforePaymentDay;
-    const paymentDayNum = this.dayOfWeekLookup(paymentDay);
-    // Need to find out when first payment day is
-    if(paymentDayNum === 0) {
-      dayBeforePaymentDay = 6;
-    } else {
-      dayBeforePaymentDay = paymentDayNum - 1;
-    }
-    const paymentDate = this.getDayOfWeek(startDate, paymentDayNum);
-    const dateBeforePaymentDay = this.getDayOfWeek(startDate, dayBeforePaymentDay);
-    const numberOfDays = this.daysBetween(startDate, dateBeforePaymentDay, true);
-
-    // Return an object containing data about the first week
-    // Next date required,
-    // to be used to get following periods in next calculation
-    return {
-      from: this.getFormattedDate(startDate),
-      to: this.getFormattedDate(dateBeforePaymentDay),
-      days: numberOfDays,
-      amount: this.getCost(numberOfDays, frequency, rent),
-      nextDate: paymentDate
+      amount: cost
     };
   },
 
@@ -84,10 +39,17 @@ export default {
 
   // Find the next date given a day of the week
   // e.g. from Sat May 12 2018 find the next Tuesday, i.e. Tue May 15 2018
-  getDayOfWeek(date, dayOfWeek) {
-    let resultDate = new Date(date.getTime());
-    resultDate.setDate(date.getDate() + (7 + dayOfWeek - date.getDay()) % 7);
+  getPayDate(startDate, dayOfWeek) {
+    let resultDate = new Date(startDate.getTime());
+    resultDate.setDate(startDate.getDate() + (7 + dayOfWeek - startDate.getDay()) % 7);
     return resultDate;
+  },
+
+  //Get the date before the inputted date
+  getDateBeforeThis(date) {
+    let thisDateAsTime = new Date(date.getTime());
+    // Subtract 1 from this date to get the day before
+    return new Date(thisDateAsTime.setDate(date.getDate() - 1));
   },
 
   // Calculate days between 2 dates
@@ -170,8 +132,8 @@ export default {
   },
 
   // Lookup the day of the week from the number
-  dayOfWeekLookup(dayNum) {
-    switch(dayNum) {
+  dayOfWeekLookup(dayString) {
+    switch(dayString) {
       case "sunday":
        return 0;
       case "monday":
