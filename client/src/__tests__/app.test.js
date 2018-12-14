@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import NavBar from '../components/NavBar';
 import SearchPage from '../components/SearchPage';
 import ajax from '../lib/ajax';
-import utils from '../lib/utils';
+import utils, {leaseIdRegex, apiTypeRegex} from '../lib/utils';
 import dateFunctions from '../lib/dateFunctions';
 
 // Page loading
@@ -56,13 +56,13 @@ it('returns valid json from CUSTOM API without ID', () => {
 
 it('can parse out an ID from a query string', () => {
   expect.assertions(1);
-  const id = utils.parseOutLeaseId('?leaseId=lease-a');
+  const id = utils.parseOutFirstTerm('?leaseId=lease-a', leaseIdRegex);
   expect(id).toEqual('lease-a');
 });
 
 it('can parse out api type from a query string', () => {
   expect.assertions(1);
-  const type = utils.parseOutAPIStr('?api=custom');
+  const type = utils.parseOutFirstTerm('?api=custom', apiTypeRegex);
   expect(type).toEqual('custom');
 });
 

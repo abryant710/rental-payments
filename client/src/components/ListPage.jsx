@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import LeaseOwnershipTable from './LeaseOwnershipTable';
 import ajax from '../lib/ajax.js';
-import utils from '../lib/utils.js';
+import utils, {apiTypeRegex} from '../lib/utils.js';
 
 // Define the component title in one place
 const ComponentTitle = <h3>List Of Leases By Tenant:</h3>;
@@ -12,7 +12,7 @@ class ListPage extends Component {
   // be run when this component is actually added to the DOM
   componentDidMount(){
     // do AJAX request here and update state with results
-    const apiType = utils.parseOutAPIStr(this.props.history.location.search);
+    const apiType = utils.parseOutFirstTerm(this.props.history.location.search, apiTypeRegex);
     console.log(apiType);
     this.updateList(apiType);
   }

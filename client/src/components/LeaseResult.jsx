@@ -2,15 +2,15 @@ import React, {Component} from 'react';
 import LeaseDetailsTable from './LeaseDetailsTable';
 import LeasePaymentsTable from './LeasePaymentsTable';
 import ajax from '../lib/ajax.js';
-import utils from '../lib/utils.js';
+import utils, {leaseIdRegex, apiTypeRegex} from '../lib/utils.js';
 
 class LeaseResult extends Component {
 
   // This is a built-in 'lifecycle method'. When defined it, it will
   // be run when this component is actually added to the DOM
   componentDidMount(){
-    const leaseId = utils.parseOutLeaseId(this.props.location.search);
-    const apiType = utils.parseOutAPIStr(this.props.location.search);
+    const leaseId = utils.parseOutFirstTerm(this.props.location.search, leaseIdRegex);
+    const apiType = utils.parseOutFirstTerm(this.props.location.search, apiTypeRegex);
     // do AJAX request here and update state with results
     this.updateResults(leaseId, apiType);
   }
