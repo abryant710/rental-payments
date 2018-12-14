@@ -8,7 +8,6 @@ class LeasePaymentsTable extends Component {
 
     // Store the table rows in state so it rerenders after each call
     this.state = {
-      totalDays: 0,
       rows: []
     }
   }
