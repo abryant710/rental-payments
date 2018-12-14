@@ -39,17 +39,15 @@ class LeasePaymentsTable extends Component {
     let cost = 0;
 
     // Add first Row
-    const firstOfficialPayDate = dateFunctions.getPayDate(startDate, dateFunctions.dayOfWeekLookup(paymentDay));
-    const dateBeforeOfficialPayDate = dateFunctions.getDateBeforeThis(firstOfficialPayDate);
-    //console.log(startDate, paymentDay, firstOfficialPayDate, dateBeforeOfficialPayDate);
-    if (startDate !== firstOfficialPayDate) {
-      //console.log("---startDate different to firstOfficialPayDate");
+    let firstOfficialPayDate = dateFunctions.getPayDate(startDate, dateFunctions.dayOfWeekLookup(paymentDay));
+    if(startDate.getDay() !== dateFunctions.dayOfWeekLookup(paymentDay)) {
+      const dateBeforeOfficialPayDate = dateFunctions.getDateBeforeInput(firstOfficialPayDate);
       numberOfDays = dateFunctions.daysBetween(startDate, dateBeforeOfficialPayDate, true);
       cost = dateFunctions.getCost(numberOfDays, frequency, rent);
-      //console.log("numberOfDays", numberOfDays);
-      //console.log("cost", cost);
       const firstRow = dateFunctions.getPaymentPeriod(startDate, dateBeforeOfficialPayDate, numberOfDays, cost);
       rows.push(firstRow);
+    } else {
+      firstOfficialPayDate = startDate;
     } // Don't push anything if the start date is same day of the week as paymentDay
 
     // Then calculate all full frequency periods in between

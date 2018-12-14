@@ -9,7 +9,6 @@ export default {
   getSingleRentData(leaseId, apiType) {
     const url = apiType === 'standard' ? `${LOCAL_NODE_BASE_URL}/leases/${leaseId}` :
     `${LOCAL_NODE_BASE_URL}/custom/leases/${leaseId}`;
-    //console.log(url);
     return axios.get(url);
   },
 
@@ -17,7 +16,6 @@ export default {
   getAllRentLeases(apiType) {
     const url = apiType === 'standard' ? `${LOCAL_NODE_BASE_URL}/leases` :
     `${LOCAL_NODE_BASE_URL}/custom/leases`;
-    //console.log(url);
     return axios.get(url);
   }
 

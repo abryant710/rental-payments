@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import utils, {apiTypeRegex} from '../lib/utils.js';
 
 class NavBar extends Component {
 
@@ -8,6 +9,14 @@ class NavBar extends Component {
     this.state = {
       api: 'standard',
     };
+  }
+
+  componentDidMount() {
+    if(this.props.history.location.search.includes('api=')) {
+      this.setState({
+        api: utils.parseOutFirstTerm(this.props.history.location.search, apiTypeRegex)
+      });
+    }
   }
 
   updateChosenAPI(type) {
@@ -35,8 +44,12 @@ class NavBar extends Component {
     return (
       <div className="navBar">
         <form>
-          <input onClick={ () => this.updateChosenAPI('standard') }className="radio" type="radio" name="api" value="standard" defaultChecked />Standard API
-          <input onClick={ () => this.updateChosenAPI('custom') }className="radio" type="radio" name="api" value="custom" />Custom API
+          <input onChange={ () => this.updateChosenAPI('standard') } className="radio" type="radio" name="api" value="standard"
+          checked={this.state.api === 'standard'}
+          />Standard API
+          <input onChange={ () => this.updateChosenAPI('custom') } className="radio" type="radio" name="api" value="custom"
+          checked={this.state.api === 'custom'}
+          />Custom API
         </form>
         <form className="navBar" onSubmit={ ev => this.pushToNavPage(ev, 'search') }>
           <input type="submit" value="Search By ID" />

@@ -9,6 +9,7 @@ class LeaseResult extends Component {
   // This is a built-in 'lifecycle method'. When defined it, it will
   // be run when this component is actually added to the DOM
   componentDidMount(){
+    // Parse out the parameters from the url
     const leaseId = utils.parseOutFirstTerm(this.props.location.search, leaseIdRegex);
     const apiType = utils.parseOutFirstTerm(this.props.location.search, apiTypeRegex);
     // do AJAX request here and update state with results
@@ -42,7 +43,6 @@ class LeaseResult extends Component {
     .then( response => {
       // Run the callback function when the response is ready,
       // i.e. SUCCESS
-      // console.log('response:', response.data);
       this.setState({
         loading: false,
         startDate: response.data.start_date,

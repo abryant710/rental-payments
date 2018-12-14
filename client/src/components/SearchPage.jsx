@@ -13,7 +13,6 @@ class SearchPage extends Component {
 
   // Set the state whenever the user updates the ID
   handleInput(event){
-    //console.log(event.target.value);
     this.setState({ leaseId: event.target.value });
   }
 

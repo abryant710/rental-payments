@@ -13,7 +13,6 @@ class ListPage extends Component {
   componentDidMount(){
     // do AJAX request here and update state with results
     const apiType = utils.parseOutFirstTerm(this.props.history.location.search, apiTypeRegex);
-    // console.log(apiType);
     this.updateList(apiType);
   }
 
@@ -41,7 +40,6 @@ class ListPage extends Component {
     .then( response => {
       // Run the callback function when the response is ready,
       // i.e. SUCCESS
-      // console.log('response:', response.data);
       this.setState({
         loading: false,
         list: response.data

@@ -16,10 +16,11 @@ export default {
       // Otherwise expect a raw number, which doesn't require a lookup
       result.setDate(result.getDate() + frequency);
     }
-    return result;
+    return this.getDateBeforeInput(result);
   },
 
-  // Method to calculate any period of day returning object to display as row
+  // Method to calculate any period payment info
+  // returning object to display as row in GUI
   getPaymentPeriod(startDate, endDate, numberOfDays, cost) {
     return {
       from: this.getFormattedDate(startDate),
@@ -37,7 +38,7 @@ export default {
     return parseFloat(Math.round(rentAmount * 100) / 100).toFixed(2);
   },
 
-  // Find the next date given a day of the week
+  // Find the next date given a day of the week (required for first week)
   // e.g. from Sat May 12 2018 find the next Tuesday, i.e. Tue May 15 2018
   getPayDate(startDate, dayOfWeek) {
     let resultDate = new Date(startDate.getTime());
@@ -45,8 +46,8 @@ export default {
     return resultDate;
   },
 
-  //Get the date before the inputted date
-  getDateBeforeThis(date) {
+  // Get the date before the inputted date
+  getDateBeforeInput(date) {
     let thisDateAsTime = new Date(date.getTime());
     // Subtract 1 from this date to get the day before
     return new Date(thisDateAsTime.setDate(date.getDate() - 1));
@@ -131,7 +132,7 @@ export default {
     }
   },
 
-  // Lookup the day of the week from the number
+  // Lookup the day of the week number from string
   dayOfWeekLookup(dayString) {
     switch(dayString) {
       case "sunday":

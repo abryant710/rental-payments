@@ -8,12 +8,6 @@ import dateFunctions from '../lib/dateFunctions';
 
 // Page loading
 
-it('renders NavBar without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<NavBar />, div);
-  ReactDOM.unmountComponentAtNode(div);
-});
-
 it('renders Search without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(<SearchPage />, div);
@@ -73,14 +67,26 @@ it('Increments date as expected', () => {
   const date = dateFunctions.incrementCurrentDate(new Date('2018-01-01'), 'weekly');
   expect(date).toBeInstanceOf(Date);
   expect(date.getMonth()).toEqual(0);
-  expect(date.getDate()).toEqual(8);
+  expect(date.getDate()).toEqual(7);
   expect(date.getYear() + 1900).toEqual(2018);
+});
+
+it('Finds the next date given a day of the week e.g. from Sat May 12 2018 find > Tue May 15 2018', () => {
+  expect.assertions(1);
+  const date = dateFunctions.getPayDate(new Date('2018-05-12'), 2);
+  expect(date).toEqual(new Date('2018-05-15'));
 });
 
 it('Gets cost as expected', () => {
   expect.assertions(1);
   const cost = dateFunctions.getCost(7, 'fortnightly', 1000);
   expect(cost).toEqual("500.00");
+});
+
+it('Gets the date before the inputted date', () => {
+  expect.assertions(1);
+  const date = dateFunctions.getDateBeforeInput(new Date('2018-05-15'));
+  expect(date).toEqual(new Date('2018-05-14'));
 });
 
 it('Calculates correct number of days between 2 dates', () => {
@@ -141,7 +147,7 @@ it('Looks up day correctly', () => {
 
 it('Gets payment period correctly', () => {
   expect.assertions(1);
-  const result = dateFunctions.getPaymentPeriod(new Date('2018-12-13'), new Date('2018-12-15'), 7, 1400);
+  const result = dateFunctions.getPaymentPeriod(new Date('2018-12-13'), new Date('2018-12-15'), 7, "1400.00");
   expect(result).toEqual({
     from: 'December, 13th 2018',
     to: 'December, 15th 2018',
